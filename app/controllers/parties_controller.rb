@@ -1,10 +1,19 @@
 class PartiesController < ApplicationController
     def index
-        @parties = Party.all
+        if params[:category_id] && Category.exists?(params[:category_id])
+            @category = Category.find_by(id: params[:category_id])
+            @parties = @category.parties
+        else
+            @parties = Party.all
+        end
+
     end
 
     def new
         @party = Party.new(name: 'Halloween')
+        @party.build_category
+
+        3.times { @party.supplies.build } 
     end
 
     def create
@@ -23,6 +32,6 @@ class PartiesController < ApplicationController
     private
     
     def party_params
-        params.require(:party).permit(:date, :budget, :name)
+        params.require(:party).permit(:date, :budget, :name, :category_id, category_attributes: [:name], supplies_attributes: [:name]) 
     end
 end

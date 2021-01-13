@@ -5,6 +5,17 @@
     <%= f.text_field :name %>
     <%= f.label :date %>
     <%= f.date_field :date %>
-    <%= f.submit %>
+    <%= f.collection_select :category_id, Category.all, :id, :name %>
 
+    <%= f.fields_for :category do |h|  %>
+        <%= h.label "Category" %>
+        <%= h.text_field :name %>
+    <% end %>
+
+    <%= f.fields_for :supplies do |s| %>
+        <%= s.label "Supplies" %>
+        <%= s.text_field :name %>
+    <% end %>
+
+    <%= f.submit %>
 <% end %>
